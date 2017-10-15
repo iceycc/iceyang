@@ -1,3 +1,22 @@
+<?php 
+  // 载入全部公共函数
+  require_once '../functions.php';
+  // 判断是否登录
+  icey_get_current_user();
+  
+  // 判断小票
+  // session_start();
+  // 访问控制
+  // if (empty($_SESSION['is_logged_in'])) {
+  //   // 没有登录标识就代表没有登录
+  //   // 跳转到登录页
+  //   header('Location: /admin/login.php');
+  //   exit; // 结束代码继续执行
+  // }
+
+ ?>
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>

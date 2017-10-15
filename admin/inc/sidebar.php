@@ -1,12 +1,20 @@
 <?php
+
+
+require_once '../functions.php';
+// 判断小票
+$user = icey_get_current_user();
+
+
+
 // 确保声明了 current_page
 $current_page = isset($current_page) ? $current_page : '';
 // => index / comments / users
 ?>
 <div class="aside">
   <div class="profile">
-    <img class="avatar" src="/static/uploads/avatar.jpg">
-    <h3 class="name">布头儿</h3>
+    <img class="avatar" src="<?php echo $user['avatar']; ?>">
+    <h3 class="name"><?php echo $user['nickname']; ?></h3>
   </div>
   <ul class="nav">
     <!-- 侧边栏是由LI列表组成，当前LI是否高亮取决于 有没有 active 的 class -->

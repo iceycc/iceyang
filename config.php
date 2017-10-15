@@ -7,22 +7,22 @@
 /**
  * 数据库主机
  */
-define('DB_HOST','127.0.0.1');
+define('ICEY_DB_HOST','127.0.0.1');
 
 
  /**
  * 数据库用户名
  */
-define('DB_USER','root');
+define('ICEY_DB_USER','root');
 
 
 /**
  * 数据库密码
  */
-define('DB_PASS','wby123');
+define('ICEY_DB_PASS','wby123');
 
 
 /**
  * 数据库名称
  */
-define('DB_name','icey');
+define('ICEY_DB_NAME','icey');
