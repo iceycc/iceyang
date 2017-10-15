@@ -13,13 +13,7 @@
   <script>NProgress.start()</script>
 
   <div class="main">
-    <nav class="navbar">
-      <button class="btn btn-default navbar-btn fa fa-bars"></button>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="profile.html"><i class="fa fa-user"></i>个人中心</a></li>
-        <li><a href="login.html"><i class="fa fa-sign-out"></i>退出</a></li>
-      </ul>
-    </nav>
+    <?php include 'inc/navbar.php'; ?>
     <div class="container-fluid">
       <div class="page-title">
         <h1>所有评论</h1>
@@ -96,8 +90,9 @@
       </table>
     </div>
   </div>
-  <!-- 引入公共部分 -->
-  <?php include 'inc/sidebar.php' ?>
+
+  <?php $current_page = 'comments'; ?>
+  <?php include 'inc/sidebar.php'; ?>
 
   <script src="/static/assets/vendors/jquery/jquery.js"></script>
   <script src="/static/assets/vendors/bootstrap/js/bootstrap.js"></script>

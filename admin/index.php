@@ -13,18 +13,12 @@
   <script>NProgress.start()</script>
 
   <div class="main">
-    <nav class="navbar">
-      <button class="btn btn-default navbar-btn fa fa-bars"></button>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="profile.php"><i class="fa fa-user"></i>个人中心</a></li>
-        <li><a href="login.php"><i class="fa fa-sign-out"></i>退出</a></li>
-      </ul>
-    </nav>
+    <?php include 'inc/navbar.php'; ?>
     <div class="container-fluid">
       <div class="jumbotron text-center">
         <h1>One Belt, One Road</h1>
         <p>Thoughts, stories and ideas.</p>
-        <p><a class="btn btn-primary btn-lg" href="post-add.php" role="button">写文章</a></p>
+        <p><a class="btn btn-primary btn-lg" href="post-add.html" role="button">写文章</a></p>
       </div>
       <div class="row">
         <div class="col-md-4">
@@ -45,8 +39,8 @@
     </div>
   </div>
 
-  <!-- 引入公共部分 -->
-  <?php include 'inc/sidebar.php' ?>
+  <?php $current_page = 'index'; ?>
+  <?php include 'inc/sidebar.php'; ?>
 
   <script src="/static/assets/vendors/jquery/jquery.js"></script>
   <script src="/static/assets/vendors/bootstrap/js/bootstrap.js"></script>
