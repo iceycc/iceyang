@@ -105,11 +105,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   <!-- 当邮箱输入框失去焦点时,自动获取头像 -->
   <script src="/static/assets/vendors/jquery/jquery.js"></script>
   <script>
+    
+    var $avatar = $("#avatar") 
     $("#email").on("blur",function(){ 
 
-      $.get('./join_ajax.php', { email: this.value }, function (res) {
-        $("#avatar").attr("src",res)
+      $.get('/admin/api/login_avatar.php', { email: this.value }, function (res) {
+        $avatar.attr("src",res)
       })
+      
     })
   </script>
 </body>

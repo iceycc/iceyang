@@ -1,3 +1,45 @@
+<?php 
+  //载入公共函数 
+  require_once '../functions.php';
+  // 判断是否登陆
+  icey_get_current_user();
+
+  // 添加表单函数
+  function add_category() {
+    // 1-获取提交过来数据
+    // 2-1校验(校验是否填写)
+    // 2-2业务校验(填写格式,数字,字母,大小写等是否符合业务要求)
+    // 3-持久化 保存到服务端数据库
+    // 4-响应
+    
+    // 1获取并校验提交过来的数据
+    if (empty($_POST['name']) || empty($_POST['slug']) ) {
+      
+      $GLOBALS['message'] = '请填写完整表单';
+      return;
+    }
+    $name = $_POST['name'];
+    $slug = $_POST['slug'];
+
+    // 链接数据库 添加一行数据
+    $sql = "insert into categories values (null,'$slug','$name');";
+    $affected_rows = icey_execute($sql);
+    if ($affected_rows === 1) {
+      // 添加成功
+      $GLOBALS['success'] = '添加成功' ;
+    }    
+  }
+
+  // 判断请求方式 post ,post为编辑功能 判断是
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (condition) {
+      # code...
+    }
+    add_category();
+  }
+  // 获取数据库中全部的Categories分类的数据
+  $categories = icey_fetch_all('select * from categories');
+?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -19,13 +61,22 @@
         <h1>分类目录</h1>
       </div>
       <!-- 有错误信息时展示 -->
-      <!-- <div class="alert alert-danger">
-        <strong>错误！</strong>发生XXX错误
-      </div> -->
+      <?php if (isset($message)): ?>
+        <div class="alert alert-danger">
+          <strong>错误！</strong><?php echo $message; ?>
+        </div>
+      <?php endif ?>
+      <?php if (isset($success)): ?>
+        <div class="alert alert-success">
+          <strong>成功！</strong><?php echo $success; ?>
+        </div>
+      <?php endif ?>
+
       <div class="row">
         <div class="col-md-4">
-          <form>
+          <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
             <h2>添加新分类目录</h2>
+            <input type="hidden" >
             <div class="form-group">
               <label for="name">名称</label>
               <input id="name" class="form-control" name="name" type="text" placeholder="分类名称">
@@ -55,33 +106,18 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="text-center"><input type="checkbox"></td>
-                <td>未分类</td>
-                <td>uncategorized</td>
-                <td class="text-center">
-                  <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
-                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-                </td>
-              </tr>
-              <tr>
-                <td class="text-center"><input type="checkbox"></td>
-                <td>未分类</td>
-                <td>uncategorized</td>
-                <td class="text-center">
-                  <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
-                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-                </td>
-              </tr>
-              <tr>
-                <td class="text-center"><input type="checkbox"></td>
-                <td>未分类</td>
-                <td>uncategorized</td>
-                <td class="text-center">
-                  <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
-                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-                </td>
-              </tr>
+              <?php foreach ($categories as $item): ?>
+                <tr>
+                  <td class="text-center"><input type="checkbox"></td>
+                  <td><?php echo $item['name'] ?></td>
+                  <td><?php echo $item['slug'] ?></td>
+                  <td class="text-center">
+                    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?id=<?php echo $item['id'] ?>" class="btn btn-info btn-xs btn-edit" data-name = '<?php echo $item['name'] ?>' data-slug = >编辑</a>
+                    <a href="/admin/categories_del.php?id=<?php echo $item['id'] ?>" class="btn btn-danger btn-xs">删除</a>
+                  </td>
+                </tr>
+              <?php endforeach ?>
+
             </tbody>
           </table>
         </div>
@@ -93,6 +129,20 @@
   <?php include 'inc/sidebar.php'; ?>
 
   <script src="/static/assets/vendors/jquery/jquery.js"></script>
+
+  <script>
+    // 点击某一行的编辑按钮,将选中的那行的数据添加到右侧表单
+    $('tbody').on('click','btn-edit',function(){
+
+
+
+
+    })
+
+
+
+
+  </script>
   <script src="/static/assets/vendors/bootstrap/js/bootstrap.js"></script>
   <script>NProgress.done()</script>
 </body>

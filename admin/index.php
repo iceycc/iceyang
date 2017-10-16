@@ -4,15 +4,13 @@
   // 判断是否登录
   icey_get_current_user();
   
-  // 判断小票
-  // session_start();
-  // 访问控制
-  // if (empty($_SESSION['is_logged_in'])) {
-  //   // 没有登录标识就代表没有登录
-  //   // 跳转到登录页
-  //   header('Location: /admin/login.php');
-  //   exit; // 结束代码继续执行
-  // }
+  // 链接数据库
+  
+  $conn = icey_connect();
+  $query = mysqli_query($conn,'select count(1) from posts');
+  var_dump($query);
+  $count = mysqli_fetch_assoc ($query);
+  
 
  ?>
 
@@ -27,6 +25,7 @@
   <link rel="stylesheet" href="/static/assets/vendors/nprogress/nprogress.css">
   <link rel="stylesheet" href="/static/assets/css/admin.css">
   <script src="/static/assets/vendors/nprogress/nprogress.js"></script>
+  <script src="/static/assets/vendors/echarts/echarts.js"></script>
 </head>
 <body>
   <script>NProgress.start()</script>
@@ -39,6 +38,7 @@
         <p>Thoughts, stories and ideas.</p>
         <p><a class="btn btn-primary btn-lg" href="post-add.html" role="button">写文章</a></p>
       </div>
+      <div id="main1" class="" style="width: 1000px;height:600px;"></div>
       <div class="row">
         <div class="col-md-4">
           <div class="panel panel-default">
@@ -46,7 +46,7 @@
               <h3 class="panel-title">站点内容统计：</h3>
             </div>
             <ul class="list-group">
-              <li class="list-group-item"><strong>10</strong>篇文章（<strong>2</strong>篇草稿）</li>
+              <li class="list-group-item"><strong><?php echo $count['count(1)'] ?></strong>篇文章（<strong>2</strong>篇草稿）</li>
               <li class="list-group-item"><strong>6</strong>个分类</li>
               <li class="list-group-item"><strong>5</strong>条评论（<strong>1</strong>条待审核）</li>
             </ul>
@@ -58,8 +58,15 @@
     </div>
   </div>
 
+  
+
   <?php $current_page = 'index'; ?>
   <?php include 'inc/sidebar.php'; ?>
+  
+  
+  <!-- 载入饼图 -->
+  <script src="/static/assets/js/index_bingtu.js"></script>
+
 
   <script src="/static/assets/vendors/jquery/jquery.js"></script>
   <script src="/static/assets/vendors/bootstrap/js/bootstrap.js"></script>
