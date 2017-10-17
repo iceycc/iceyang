@@ -4,7 +4,7 @@
 $email = $_GET['email'];
 
 // 连接数据库
-require_once '../functions.php';
+require_once __DIR__ . '/../../functions.php';
 
 $conn = icey_connect();
 

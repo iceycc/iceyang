@@ -2,11 +2,10 @@
 /**
  * 公共的函数封装
  */
-
+// chdir(__DIR__);
 // 载入配置文件  为了防止function重复被载入出错
-require_once '../config.php';
-
-
+require_once __DIR__ . '/config.php';
+require_once 'config.php';
 
 /**
  *  根据配置文件链接数据库
