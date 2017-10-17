@@ -16,36 +16,54 @@
 
     // 接受并校验上传的头像
     if (!(isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK)) {
-        $GLOBALS['message'] = '上传头像失败';
-        return;
-    }
-    //  pathinfo('./foo/bar.ext')
+        // $GLOBALS['message'] = '上传头像失败'; 
+        $is_new = false;     
+        
+    } else {
+      //  pathinfo('./foo/bar.ext')
     
-    // 获取上传文件的扩展名
-    $ext_name = pathinfo($_FILES['avatar']['name'])['extension'];    
-    // var_dump($_FILES['avatar']['name']);
-    // var_dump($ext_name);
-    // 目标目录
-    $target = '../static/uploads/img-' . uniqid() . '.' . $ext_name;
-    // 临时存放目录$_FILES['avatar']['tmp_name']
-    $is_ok = move_uploaded_file($_FILES['avatar']['tmp_name'], $target);
+      // 获取上传文件的扩展名
+      $ext_name = pathinfo($_FILES['avatar']['name'])['extension'];    
+      // var_dump($_FILES['avatar']['name']);
+      // var_dump($ext_name);
+      // 目标目录
+      $target = '../static/uploads/img-' . uniqid() . '.' . $ext_name;
+      // 临时存放目录$_FILES['avatar']['tmp_name']
+      $is_ok = move_uploaded_file($_FILES['avatar']['tmp_name'], $target);
 
-    if (!$is_ok) {
-        $GLOBALS['message'] = '上传头像失败';
-        return;
-    } 
+      if (!$is_ok) {
+          $GLOBALS['message'] = '上传头像失败';          
+      }
+      $is_new = true; 
+
+    }
+ 
     // 得到最终提交的数据
     $email = $_POST['email'];
     $slug = $_POST['slug'];
     $nickname = $_POST['nickname'];
     $password = $_POST['password'];
-    $avatar = substr($target, 2);
+
+    // 接受下id
+    // $id = isset($_POST['id']) ? $_POST['id'] : "";
+    // //判断id是否存在 存在的话
+    // if (!$id) {     
+    //   $sql1 = "select avatar from users where id = $id;";
+    //   $yuan_ava = icey_fetch_one($sql1)['avatar'];
+    // // }
+    // $avatar = $is_new ? substr($target, 2) 
+    //   : isset($yuan_ava) 
+    //   ? $yuan_ava : '' ;
+    
+
+
+    
 
     // 数据持久化
-
-
     if (empty($_POST['id'])) {
+      $avatar = substr($target, 2);
       // die('可以进行添加了');
+      // var_dump(expression);
       $sql = "insert into users values (null,'$slug','$email','$password','$nickname','$avatar',null,'activated');";
       $affected_rows = icey_execute($sql);
       if ($affected_rows === 1) {
@@ -53,8 +71,23 @@
       $GLOBALS['success'] = '添加成功' ;
       }  
     }else{
+      //获取原有默认头像
+      $id = $_POST['id'];
+      $sql1 = "select avatar from users where id = $id;";
+      $yuan_ava = icey_fetch_one($sql1)['avatar'];
+      $avatar = $is_new ? substr($target, 2) 
+        : isset($yuan_ava) 
+        ? $yuan_ava : '' ;
       // die('还不能实现修改');
-      
+
+      $sql = "update users set nickname = '{$nickname}',avatar = '{$avatar}',password = '{$password}',email = '{$email}', slug = '{$slug}' where id ={$id}";
+      $affected_rows = icey_execute($sql);
+      if ($affected_rows === 1) {
+        // 添加成功
+        $GLOBALS['success'] = '修改成功' ;
+      }  else{
+        $GLOBALS['success'] = '但是一项也没修改' ;
+      }   
       
     }
 
@@ -111,7 +144,7 @@
           <strong>错误！</strong><?php echo $message; ?>
         </div>
       <?php endif ?>  
-      <!-- 有错误信息时展示 -->
+      <!-- 有成功信息时展示 -->
       <?php if (isset($success)): ?>
         <div class="alert alert-success">
           <strong>成功！</strong><?php echo $success; ?>
@@ -122,15 +155,15 @@
         <div class="col-md-4">
           <form action = "<?php echo $_SERVER['PHP_SELF']?>" method = "post" enctype="multipart/form-data">
             <h2>添加新用户</h2>
-            <input type="hidden"  name = "id" value="0">
+            <input type="hidden"  name = "id" value="0" id="id">
 
 
             <!-- 添加一个上传头像 的input-->
             <div id="form-group">              
-              <label for="avatar">上传头像</label>
+              <label for="avatar">修改头像</label>
               <input type="file" name="avatar">
               <!-- //头像预览 -->
-              <div id="preview">头像预览</div>
+              <div id="preview"><img src="/static/assets/img/default.png" alt="" id="avatar"></div>
             </div>
             
             <div class="form-group">
@@ -151,7 +184,8 @@
               <input id="password" class="form-control" name="password" type="text" placeholder="密码">
             </div>
             <div class="form-group">
-              <button class="btn btn-primary" type="submit">添加</button>
+              <button class="btn btn-primary btn-add" type="submit">添加</button>
+              <button class="btn btn-default btn-no" type="button" style="display: none;">取消</button>
             </div>
           </form>
         </div>
@@ -182,7 +216,7 @@
                   <td><?php echo isset($item['nickname']) ? $item['nickname'] : "" ?></td>
                   <td><?php echo empty($item['status']) ? "未激活" : "激活" ?></td>
                   <td class="text-center">
-                    <button class="btn btn-info btn-xs btn-edit" data-slug = "<?php echo $item['slug'] ?>" data-name = "<?php echo $item['nickname'] ?>" data-slug ="<?php echo $item['slug'] ?>" data-id = "<?php echo $item['id'] ?>">编辑</button>
+                    <button class="btn btn-info btn-xs btn-edit" data-password = "<?php echo $item['password'] ?>" data-avatar = "<?php echo $item['avatar'] ?>" data-email = "<?php echo $item['email'] ?>"data-nickname = "<?php echo $item['nickname'] ?>" data-slug ="<?php echo $item['slug'] ?>" data-id = "<?php echo $item['id'] ?>">编辑</button>
                     <a href="/admin/users_del.php?id=<?php echo $item['id'] ?>" class="btn btn-danger btn-xs">删除</a>
                   </td>
                 </tr>                 
@@ -246,17 +280,24 @@
 
       $("tbody").on("click", ".btn-edit", function() {
         
-        var name = $(this).data("name")
+        
+        var email = $(this).data("email")
         var slug = $(this).data("slug")
+        var nickname = $(this).data("nickname")
+        var password = $(this).data("password")
         var id = $(this).data("id")
-        console.log(id)
+        var avatar = $(this).data("avatar")
+        // console.log(id) 
         
         $("form h2").text("编辑页面")
         $(".btn-add").text("保存")
         $("#id").val(id)
         
-        $("#name").val(name)
-        $("#slug").val(name)
+        $("#email").val(email)
+        $("#slug").val(slug)
+        $("#nickname").val(nickname)
+        $("#password").val(password)
+        $("#avatar").attr("src",avatar)
         $(".btn-no").fadeIn()
       })
         // 取消编辑

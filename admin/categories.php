@@ -175,7 +175,7 @@
       $("#id").val(id)
       
       $("#name").val(name)
-      $("#slug").val(name)
+      $("#slug").val(slug)
       $(".btn-no").fadeIn()
     })
       // 取消编辑
@@ -193,12 +193,12 @@
     // 批量删除
     $(function($){
 
-      var $btnDle = $("#btn_del")
+      var $btnDel = $("#btn_del")
       // 保存选中行对应的id
       var checkeds = []
       // 事件委托 
       $("tbody").on("change", "input", function() {
-        console.log(1)
+        // console.log(1)
         var $this = $(this)
         // 注意给input添加一个data-id的自定义属性
         var id = $this.data("id")        
@@ -212,10 +212,10 @@
           checkeds.splice(checkeds.indexOf(id),1)
         }
         // 根据有没有选中宣示或隐藏        
-        checkeds.length ? $btnDle.fadeIn() : $btnDle.fadeOut()
+        checkeds.length ? $btnDel.fadeIn() : $btnDel.fadeOut()
         // 改变批量删除的问号参数
         // 
-        $btnDle.attr("href", "/admin/categories_del.php?id=" + checkeds)
+        $btnDel.attr("href", "/admin/categories_del.php?id=" + checkeds)
       }) 
       
       
