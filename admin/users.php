@@ -56,13 +56,15 @@
       $GLOBALS['success'] = '添加成功' ;
       }  
     }else{
+      var_dump($is_new);
       //获取原有默认头像
       $id = $_POST['id'];
       $sql1 = "select avatar from users where id = $id;";
       $yuan_ava = icey_fetch_one($sql1)['avatar'];
       $avatar = $is_new ? substr($target, 2) 
-        : isset($yuan_ava) 
-        ? $yuan_ava : '' ;
+        : (isset($yuan_ava) 
+        ? $yuan_ava : '') ;
+       var_dump($avatar);
       // die('还不能实现修改');
 
       $sql = "update users set nickname = '{$nickname}',avatar = '{$avatar}',password = '{$password}',email = '{$email}', slug = '{$slug}' where id ={$id}";

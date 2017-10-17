@@ -3,8 +3,8 @@
   require_once '../functions.php';
   // 判断是否登录
   // icey_get_current_user();
-// 找到当前访问用户的箱子
-// 删除这个箱子里面用来标识用户登录状态的数据
+  // 找到当前访问用户的箱子
+  // 删除这个箱子里面用来标识用户登录状态的数据
 
   $user = icey_get_current_user();
 
