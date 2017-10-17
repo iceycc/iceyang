@@ -1,3 +1,15 @@
+<?php 
+  //载入公共函数 
+  require_once '../functions.php';
+  // 获取用户登陆信息 如果没登陆,返回登录页面
+  icey_get_current_user();
+
+
+
+ ?>
+
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>

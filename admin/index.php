@@ -8,7 +8,7 @@
   
   $conn = icey_connect();
   $query = mysqli_query($conn,'select count(1) from posts');
-  var_dump($query);
+  // var_dump($query);
   $count = mysqli_fetch_assoc ($query);
   
 

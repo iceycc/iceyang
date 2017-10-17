@@ -42,22 +42,7 @@
     $email = $_POST['email'];
     $slug = $_POST['slug'];
     $nickname = $_POST['nickname'];
-    $password = $_POST['password'];
-
-    // 接受下id
-    // $id = isset($_POST['id']) ? $_POST['id'] : "";
-    // //判断id是否存在 存在的话
-    // if (!$id) {     
-    //   $sql1 = "select avatar from users where id = $id;";
-    //   $yuan_ava = icey_fetch_one($sql1)['avatar'];
-    // // }
-    // $avatar = $is_new ? substr($target, 2) 
-    //   : isset($yuan_ava) 
-    //   ? $yuan_ava : '' ;
-    
-
-
-    
+    $password = $_POST['password'];     
 
     // 数据持久化
     if (empty($_POST['id'])) {

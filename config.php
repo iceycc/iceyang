@@ -25,4 +25,4 @@ define('ICEY_DB_PASS','wby123');
 /**
  * 数据库名称
  */
-define('ICEY_DB_NAME','icey');
+define('ICEY_DB_NAME','baixiu');

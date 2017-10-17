@@ -1,3 +1,17 @@
+<?php 
+  // 载入全部公共函数
+  require_once '../functions.php';
+  // 判断是否登录
+  // icey_get_current_user();
+// 找到当前访问用户的箱子
+// 删除这个箱子里面用来标识用户登录状态的数据
+
+  $user = icey_get_current_user();
+
+
+ ?>
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -28,7 +42,7 @@
           <div class="col-sm-6">
             <label class="form-image">
               <input id="avatar" type="file">
-              <img src="/static/assets/img/default.png">
+              <img src="<?php echo $user['avatar'] ?>">
               <i class="mask fa fa-upload"></i>
             </label>
           </div>
@@ -36,34 +50,34 @@
         <div class="form-group">
           <label for="email" class="col-sm-3 control-label">邮箱</label>
           <div class="col-sm-6">
-            <input id="email" class="form-control" name="email" type="type" value="w@zce.me" placeholder="邮箱" readonly>
+            <input id="email" class="form-control" name="email" type="type" value="<?php echo $user['email'] ?>" placeholder="邮箱" readonly>
             <p class="help-block">登录邮箱不允许修改</p>
           </div>
         </div>
         <div class="form-group">
           <label for="slug" class="col-sm-3 control-label">别名</label>
           <div class="col-sm-6">
-            <input id="slug" class="form-control" name="slug" type="type" value="zce" placeholder="slug">
+            <input id="slug" class="form-control" name="slug" type="type" value="<?php echo $user['slug'] ?>" placeholder="slug">
             <p class="help-block">https://zce.me/author/<strong>zce</strong></p>
           </div>
         </div>
         <div class="form-group">
           <label for="nickname" class="col-sm-3 control-label">昵称</label>
           <div class="col-sm-6">
-            <input id="nickname" class="form-control" name="nickname" type="type" value="汪磊" placeholder="昵称">
+            <input id="nickname" class="form-control" name="nickname" type="type" value="<?php echo $user['nickname'] ?>" placeholder="昵称">
             <p class="help-block">限制在 2-16 个字符</p>
           </div>
         </div>
         <div class="form-group">
           <label for="bio" class="col-sm-3 control-label">简介</label>
           <div class="col-sm-6">
-            <textarea id="bio" class="form-control" placeholder="Bio" cols="30" rows="6">MAKE IT BETTER!</textarea>
+            <textarea id="bio" class="form-control" placeholder="Bio" cols="30" rows="6"><?php echo $user['bio'] ?></textarea>
           </div>
         </div>
         <div class="form-group">
           <div class="col-sm-offset-3 col-sm-6">
             <button type="submit" class="btn btn-primary">更新</button>
-            <a class="btn btn-link" href="password-reset.html">修改密码</a>
+            <a class="btn btn-link" href="password-reset.php">修改密码</a>
           </div>
         </div>
       </form>

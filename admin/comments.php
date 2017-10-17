@@ -1,3 +1,18 @@
+<?php 
+  //载入公共函数 
+  require_once '../functions.php';
+  // 获取用户登陆信息 如果没登陆,返回登录页面
+  icey_get_current_user();
+
+  // 获取数据
+  $sql = "select * from comments";
+  $comments = icey_fetch_all($sql);
+  // var_dump($comments);
+
+
+   ?>
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -49,43 +64,22 @@
             <th class="text-center" width="100">操作</th>
           </tr>
         </thead>
-        <tbody>
+         <tbody>
+          <?php foreach ($comments as $item): ?>
           <tr class="danger">
             <td class="text-center"><input type="checkbox"></td>
-            <td>大大</td>
-            <td>楼主好人，顶一个</td>
-            <td>《Hello world》</td>
-            <td>2016/10/07</td>
-            <td>未批准</td>
+            <td><?php echo $item['author'] ?></td>
+            <td>楼上说的对</td>
+            <td><?php echo $item['post_id'] ?></td>
+            <td><?php echo $item['created'] ?></td>
+            <td><?php echo $item['status'] ?></td>
             <td class="text-center">
               <a href="post-add.html" class="btn btn-info btn-xs">批准</a>
               <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
             </td>
-          </tr>
-          <tr>
-            <td class="text-center"><input type="checkbox"></td>
-            <td>大大</td>
-            <td>楼主好人，顶一个</td>
-            <td>《Hello world》</td>
-            <td>2016/10/07</td>
-            <td>已批准</td>
-            <td class="text-center">
-              <a href="post-add.html" class="btn btn-warning btn-xs">驳回</a>
-              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="text-center"><input type="checkbox"></td>
-            <td>大大</td>
-            <td>楼主好人，顶一个</td>
-            <td>《Hello world》</td>
-            <td>2016/10/07</td>
-            <td>已批准</td>
-            <td class="text-center">
-              <a href="post-add.html" class="btn btn-warning btn-xs">驳回</a>
-              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
+          </tr>            
+          <?php endforeach ?>
+
         </tbody>
       </table>
     </div>
