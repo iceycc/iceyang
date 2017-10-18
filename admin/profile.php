@@ -76,7 +76,7 @@
         </div>
         <div class="form-group">
           <div class="col-sm-offset-3 col-sm-6">
-            <button type="submit" class="btn btn-primary">更新</button>
+            <button type="button" class="btn btn-primary">更新</button>
             <a class="btn btn-link" href="password-reset.php">修改密码</a>
           </div>
         </div>
@@ -88,6 +88,44 @@
 
   <script src="/static/assets/vendors/jquery/jquery.js"></script>
   <script src="/static/assets/vendors/bootstrap/js/bootstrap.js"></script>
+  <script>
+    $(function ($) {
+      
+      var email_name = $("#email']")
+      var slug = $("#slug")
+      var avatar_name = $("[type='file']")
+
+      var formData = new FormData();
+
+      // 点击提交
+      $("[type='button']").on("click",function () {
+        console.log(1)
+        $.ajax(
+          url:"/admin/api/profile-update.php", 
+          type:'POST',
+          data:{
+
+              },
+          success:function (reg) {
+            console.log(reg)
+          }
+        
+
+
+
+
+        )
+
+
+
+
+      })
+
+      
+    })
+  </script>
+
+
   <script>NProgress.done()</script>
 </body>
 </html>

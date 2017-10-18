@@ -36,7 +36,7 @@
     // 链接数据库找到数据库对应的数据
     // 修改数据库中的内容
     // 反馈
-        if (empty($_POST['name']) || empty($_POST['slug']) ) {
+    if (empty($_POST['name']) || empty($_POST['slug']) ) {
       
       $GLOBALS['message'] = '请填写完整表单';
       return;
@@ -182,6 +182,7 @@
     $(".btn-no").on("click", function () {
       $("form h2").text("添加新分类目录")
       $(".btn-add").text("提交")
+      $("#id").val(0)
 
       $("#name").val("")
       $("#slug").val("")
@@ -204,8 +205,9 @@
         var id = $this.data("id")        
 
         // checked选中为true
-        if ($this.prop("checked")) {          
-          checkeds.push(id)
+        if ($this.prop("checked")) { 
+          //添加之前判断下 数组中是否存在 
+          checkeds.indexOf(id) === -1 && checkeds.push(id)
         } else {
         // indexOf获取数组中某个元素的索引
         // splice去除数组中连续的元素 ,返回截取的元素

@@ -1,8 +1,6 @@
 <?php 
 require_once '../functions.php';
-// 1 接受请求过来的id值,并校验
-// 2 链接数据库,找到该id对应的那一行数据,删除它
-// 3 返回
+
 // 
 if (empty($_GET['id'])) {
 	# code...

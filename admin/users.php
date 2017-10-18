@@ -45,7 +45,9 @@
     $password = $_POST['password'];     
 
     // 数据持久化
+    // 根据id是否为0 判断是添加还是修改
     if (empty($_POST['id'])) {
+      // id为0即empty($_POST['id'])为true ,进行提交操作
       $avatar = substr($target, 2);
       // die('可以进行添加了');
       // var_dump(expression);
@@ -56,6 +58,7 @@
       $GLOBALS['success'] = '添加成功' ;
       }  
     }else{
+      // id不为空 即有值(此处未判断不是数值的情况) 为修改
       var_dump($is_new);
       //获取原有默认头像
       $id = $_POST['id'];
