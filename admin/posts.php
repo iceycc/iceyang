@@ -5,32 +5,49 @@
   icey_get_current_user();
 
   // 上层分类目录下拉菜单的获取
-  // $categories = icey_fetch_all('select * from categories;');
+  $categories = icey_fetch_all('select * from categories;');
 
+
+
+  // 处理筛选逻辑=====================================================================
   //传递了筛选参数才需要where
   $where = '1 = 1' ; 
-  if (isset($_GET['category']) && $_GET['category'] === 'all') {
+  if (isset($_GET['category']) && $_GET['category'] !== 'all') {
     // 客户端传递了分类的参数
     $where .= ' and posts.category_id = ' . $_GET['category'];    
   }
   
-  if (isset($_GET['status']) && $_GET['status'] === 'all') {
+  if (isset($_GET['status']) && $_GET['status'] !== 'all') {
     // 客户端传递了状态的参数 不为all
     $where .= " and posts.status = '{$_GET['status']}';";    
   }
-  //处理分页参数 
+
+
+  //处理分页参数 ==========================
   //页码
   $page = empty($_GET['page']) ? 1 : (int)$_GET['page'];
   // 每页数量
   $size = 20 ;
   // 查询时limit的第一个参数,跳过多少行开始查询
   $rows = ($page - 1) * $size;
+  // 查询数据库中满足条件的有多少条数据
+  $count = (int)icey_fetch_one('select
+      count(1) as num 
+    from posts
+    inner join users on posts.user_id = users.id
+    inner join categories on posts.category_id = categories.id
+    where ' . $where)['num'];
+  // 求总页数 开始页码 结束页码 
+  var_dump($count);
+  $sum_page = (int)ceil($count / $size);
+  $begin = $page - 2 < 1 ? 1 : $page - 2;
+  $end = $begin + 4;
+  if ($end > $sum_page) {
+    $end = $sum_page;
+    $begin = $end - 4 < 1 ? 1 : $end - 4;
+  }
 
-
-
-
-
-  // 查询语句 
+  // 查询语句 ===================
   // 通过posts.user_id = users.id和posts.category_id = categories.id
   // 使posts表与users表和categories表建立联系
   $posts = icey_fetch_all('select
@@ -47,6 +64,9 @@
     order by posts.created desc
     limit ' . $rows . ',' . $size . ';' );
 
+
+  // 过滤函数======-----------------------=========================
+
   // $posts = icey_fetch_all('select * from posts');
   // // var_dump($posts);
   function posts_status ($status) {
@@ -57,7 +77,7 @@
         return '已发布';
       case 'trashed':
         return '回收站';
-      default:        
+      default:
         return '未知';
     }
   }
@@ -106,23 +126,30 @@
         <form class="form-inline">
           <select name="" class="form-control input-sm">
             <option value="all">所有分类</option>
-            <?php foreach ($posts as $item): ?>
-              <option value=""><?php echo $item['category_name'] ?></option>              
+            <?php foreach ($categories as $item): ?>
+              <option value=""><?php echo $item['name'] ?></option>              
             <?php endforeach ?>
           </select>
-          <select name="" class="form-control input-sm">
+          <select name="categories" class="form-control input-sm">
             <option value="all">所有状态</option>
-            <option value="">草稿</option>
-            <option value="">已发布</option>
+            <option value="drafted"<?php echo isset($_GET['status']) && $_GET['status'] ==='drafted' ? ' selected' : '' ?> >草稿</option>
+            <option value="published"<?php echo isset($_GET['status']) && $_GET['status'] ==='published' ? ' selected' : '' ?> >已发布</option>
+            <option value="trashed"<?php echo isset($_GET['status']) && $_GET['status'] ==='trashed' ? ' selected' : '' ?> >回收站</option>
           </select>
           <button class="btn btn-default btn-sm">筛选</button>
         </form>
         <ul class="pagination pagination-sm pull-right">
-          <li><a href="#">上一页</a></li>
-          <?php for ( $i = 1; $i < 6; $i++ ) : ?>
-          <li><a href="?page=<?php echo $i ?>"><?php echo "$i"; ?></a></li>
-          <?php endfor;  ?>
-          <li><a href="#">下一页</a></li>
+          <!-- 左上分页按钮分页业务的处理 -->
+          <!-- 法一 ： 通过服务端获取到 当前页$page 起始业$begin 结束页$end 渲染动态页面 -->
+<!--           <li><a href="/admin/posts.php?page=<?php //echo $page - 1; ?>">上一页</a></li>
+          <?php //for ($i = $begin; $i <= $end; $i++): ?>
+          <li<?php// echo $page === $i ? ' class="active"' : ''; ?>><a href="/admin/posts.php?page=<?php //echo $i; ?>"><?php //echo $i; ?></a></li>
+          <?php //endfor; ?>
+          <li><a href="/admin/posts.php?page=<?php //echo $page + 1; ?>">下一页</a></li> -->
+
+
+          <!-- 法二  通过封装函数   传入$page, $total_page ,请求地址含参数  还有展示的格数 -->
+          <?php icey_pagination($page, $sum_page, '?page=%d', 5); ?>
         </ul>
       </div>
       <table class="table table-striped table-bordered table-hover">
