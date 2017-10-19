@@ -1,18 +1,11 @@
-<?php 
-  //载入公共函数 
-  require_once '../functions.php';
-  // 获取用户登陆信息 如果没登陆,返回登录页面
-  icey_get_current_user();
+<?php
 
-  // 获取数据
-  $sql = "select * from comments";
-  $comments = icey_fetch_all($sql);
-  // var_dump($comments);
+// 载入全部公共函数
+require_once '../functions.php';
+// 判断是否登录
+icey_get_current_user();
 
-
-   ?>
-
-
+?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -64,22 +57,43 @@
             <th class="text-center" width="100">操作</th>
           </tr>
         </thead>
-         <tbody>
-          <?php foreach ($comments as $item): ?>
-          <tr class="danger">
+        <tbody id="list">
+          <!-- <tr class="danger">
             <td class="text-center"><input type="checkbox"></td>
-            <td><?php echo $item['author'] ?></td>
-            <td>楼上说的对</td>
-            <td><?php echo $item['post_id'] ?></td>
-            <td><?php echo $item['created'] ?></td>
-            <td><?php echo $item['status'] ?></td>
+            <td>大大</td>
+            <td>楼主好人，顶一个</td>
+            <td>《Hello world》</td>
+            <td>2016/10/07</td>
+            <td>未批准</td>
             <td class="text-center">
               <a href="post-add.html" class="btn btn-info btn-xs">批准</a>
               <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
             </td>
-          </tr>            
-          <?php endforeach ?>
-
+          </tr>
+          <tr>
+            <td class="text-center"><input type="checkbox"></td>
+            <td>大大</td>
+            <td>楼主好人，顶一个</td>
+            <td>《Hello world》</td>
+            <td>2016/10/07</td>
+            <td>已批准</td>
+            <td class="text-center">
+              <a href="post-add.html" class="btn btn-warning btn-xs">驳回</a>
+              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-center"><input type="checkbox"></td>
+            <td>大大</td>
+            <td>楼主好人，顶一个</td>
+            <td>《Hello world》</td>
+            <td>2016/10/07</td>
+            <td>已批准</td>
+            <td class="text-center">
+              <a href="post-add.html" class="btn btn-warning btn-xs">驳回</a>
+              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+            </td>
+          </tr> -->
         </tbody>
       </table>
     </div>
@@ -90,6 +104,51 @@
 
   <script src="/static/assets/vendors/jquery/jquery.js"></script>
   <script src="/static/assets/vendors/bootstrap/js/bootstrap.js"></script>
+  <script src="/static/assets/vendors/jsrender/jsrender.js"></script>
+  <!-- 建议模板类型格式 text/x-<template-engine-name> -->
+  <script id="comments_tmpl" type="text/x-jsrender">
+    {{for comments}}
+    <tr>
+      <td class="text-center"><input type="checkbox"></td>
+      <td>{{: author }}</td>
+      <td>{{: content }}</td>
+      <td>《{{: post_id }}》</td>
+      <td>{{: created }}</td>
+      <td>{{: status }}</td>
+      <td class="text-center">
+        <a href="post-add.html" class="btn btn-warning btn-xs">驳回</a>
+        <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+      </td>
+    </tr>
+    {{/for}}
+  </script>
+  <!-- 页面中的JS最终需要摘取到单独的JS文件中 -->
+  <script>
+    $(function ($) {
+      // 发送AJAX请求获取界面数据
+      $.ajax({
+        // 一般把AJAX请求的这种地址称之为接口（数据接口）
+        url: '/admin/api/comments.php',
+        type: 'get',
+        // 如果服务端响应的 Content-Type 为 application/json 这里可以不用设置
+        dataType: 'json',
+        success: function (res) {
+          // 将数据渲染到表格中
+          // 模板引擎使用：
+          // 1. 引入模板引擎
+          // 2. 准备一个模板
+          // 3. 准备一个数据
+          var context = { comments: res }
+          // 4. 通过模板引擎提供某个API将模板和数据融合在一起
+          var html = $('#comments_tmpl').render(context)
+          // console.log(html)
+
+          // 将HTML放到tbody中
+          $('#list').html(html)
+        }
+      })
+    })
+  </script>
   <script>NProgress.done()</script>
 </body>
 </html>

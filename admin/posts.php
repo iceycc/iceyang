@@ -14,14 +14,16 @@
   $where = '1 = 1' ; 
   if (isset($_GET['category']) && $_GET['category'] !== 'all') {
     // 客户端传递了分类的参数
-    $where .= ' and posts.category_id = ' . $_GET['category'];    
+    $where .= ' and posts.category_id = ' . $_GET['category'];
+    
   }
-  
+  $category = isset($_GET['category']) ? $_GET['category'] : '' ;
   if (isset($_GET['status']) && $_GET['status'] !== 'all') {
     // 客户端传递了状态的参数 不为all
-    $where .= " and posts.status = '{$_GET['status']}';";    
+    $where .= " and posts.status = '{$_GET['status']}'";  
+    
   }
-
+  $status = isset($_GET['status']) ? $_GET['status'] : '' ;  
 
   //处理分页参数 ==========================
   //页码
@@ -46,11 +48,11 @@
     $end = $sum_page;
     $begin = $end - 4 < 1 ? 1 : $end - 4;
   }
-
+  // var_dump($where);
   // 查询语句 ===================
   // 通过posts.user_id = users.id和posts.category_id = categories.id
   // 使posts表与users表和categories表建立联系
-  $posts = icey_fetch_all('select
+  $sql = 'select
       posts.id,
       posts.created,
       posts.title,      
@@ -62,13 +64,16 @@
     inner join categories on posts.category_id = categories.id
     where ' . $where . '
     order by posts.created desc
-    limit ' . $rows . ',' . $size . ';' );
+    limit ' . $rows . ',' . $size . ';' ;
+
+  // var_dump($sql);
+  $posts = icey_fetch_all($sql);
 
 
   // 过滤函数======-----------------------=========================
 
   // $posts = icey_fetch_all('select * from posts');
-  // // var_dump($posts);
+  // var_dump($posts);
   function posts_status ($status) {
     switch ($status) {
       case 'drafted':
@@ -123,20 +128,20 @@
       <div class="page-action">
         <!-- show when multiple checked -->
         <a class="btn btn-danger btn-sm" href="javascript:;" style="display: none">批量删除</a>
-        <form class="form-inline">
-          <select name="" class="form-control input-sm">
+        <form class="form-inline" method="get" action="<?php echo $_SERVER['PHP_SELF'] ?>">
+          <select name="category" class="form-control input-sm">
             <option value="all">所有分类</option>
             <?php foreach ($categories as $item): ?>
-              <option value=""><?php echo $item['name'] ?></option>              
+              <option value="<?php echo $item['id']; ?>"<?php echo isset($_GET['category']) && $_GET['category'] == $item['id'] ? ' selected' : '' ?>><?php echo $item['name'] ?></option>              
             <?php endforeach ?>
           </select>
-          <select name="categories" class="form-control input-sm">
+          <select name="status" class="form-control input-sm">
             <option value="all">所有状态</option>
             <option value="drafted"<?php echo isset($_GET['status']) && $_GET['status'] ==='drafted' ? ' selected' : '' ?> >草稿</option>
             <option value="published"<?php echo isset($_GET['status']) && $_GET['status'] ==='published' ? ' selected' : '' ?> >已发布</option>
             <option value="trashed"<?php echo isset($_GET['status']) && $_GET['status'] ==='trashed' ? ' selected' : '' ?> >回收站</option>
           </select>
-          <button class="btn btn-default btn-sm">筛选</button>
+          <button class="btn btn-default btn-sm" type="submit">筛选</button>
         </form>
         <ul class="pagination pagination-sm pull-right">
           <!-- 左上分页按钮分页业务的处理 -->
@@ -149,7 +154,8 @@
 
 
           <!-- 法二  通过封装函数   传入$page, $total_page ,请求地址含参数  还有展示的格数 -->
-          <?php icey_pagination($page, $sum_page, '?page=%d', 5); ?>
+          <!-- &categories='. $category .'&status='.$status -->
+          <?php icey_pagination($page, $sum_page, '?page=%d&category='. $category .'&status='. $status, 5); ?>
         </ul>
       </div>
       <table class="table table-striped table-bordered table-hover">
