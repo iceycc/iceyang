@@ -49,52 +49,15 @@ icey_get_current_user();
         <thead>
           <tr>
             <th class="text-center" width="40"><input type="checkbox"></th>
-            <th>作者</th>
+            <th width="100">作者</th>
             <th>评论</th>
-            <th>评论在</th>
-            <th>提交于</th>
-            <th>状态</th>
+            <th width="100">评论在</th>
+            <th width="100">提交于</th>
+            <th width="100">状态</th>
             <th class="text-center" width="100">操作</th>
           </tr>
         </thead>
-        <tbody id="list">
-          <!-- <tr class="danger">
-            <td class="text-center"><input type="checkbox"></td>
-            <td>大大</td>
-            <td>楼主好人，顶一个</td>
-            <td>《Hello world》</td>
-            <td>2016/10/07</td>
-            <td>未批准</td>
-            <td class="text-center">
-              <a href="post-add.html" class="btn btn-info btn-xs">批准</a>
-              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="text-center"><input type="checkbox"></td>
-            <td>大大</td>
-            <td>楼主好人，顶一个</td>
-            <td>《Hello world》</td>
-            <td>2016/10/07</td>
-            <td>已批准</td>
-            <td class="text-center">
-              <a href="post-add.html" class="btn btn-warning btn-xs">驳回</a>
-              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="text-center"><input type="checkbox"></td>
-            <td>大大</td>
-            <td>楼主好人，顶一个</td>
-            <td>《Hello world》</td>
-            <td>2016/10/07</td>
-            <td>已批准</td>
-            <td class="text-center">
-              <a href="post-add.html" class="btn btn-warning btn-xs">驳回</a>
-              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr> -->
-        </tbody>
+        <tbody id="list"></tbody>
       </table>
     </div>
   </div>
@@ -114,7 +77,7 @@ icey_get_current_user();
       <td>{{: content }}</td>
       <td>《{{: post_id }}》</td>
       <td>{{: created }}</td>
-      <td>{{: status }}</td>
+      <td>{{: status === 'approved' ? '批准' : status === 'held' ? '待审' : '驳回' }}</td>
       <td class="text-center">
         <a href="post-add.html" class="btn btn-warning btn-xs">驳回</a>
         <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
@@ -127,24 +90,26 @@ icey_get_current_user();
     $(function ($) {
       // 发送AJAX请求获取界面数据
       $.ajax({
-        // 一般把AJAX请求的这种地址称之为接口（数据接口）
-        url: '/admin/api/comments.php',
-        type: 'get',
-        // 如果服务端响应的 Content-Type 为 application/json 这里可以不用设置
-        dataType: 'json',
+        url: "/admin/api/comments.php",
+        type: "get",
+        // 设置响应的Content-Type为application/json  这里可以不设置
+        dataType: "json",
+        data: { page: 1 },
         success: function (res) {
+          /**
+           * 渲染数据
+           */
           // 将数据渲染到表格中
           // 模板引擎使用：
           // 1. 引入模板引擎
           // 2. 准备一个模板
           // 3. 准备一个数据
           var context = { comments: res }
-          // 4. 通过模板引擎提供某个API将模板和数据融合在一起
-          var html = $('#comments_tmpl').render(context)
-          // console.log(html)
+          console.log(context)
+          var html = $("#comments_tmpl").render(context)
+          console.dir(html)
+          $("#list").html(html)       
 
-          // 将HTML放到tbody中
-          $('#list').html(html)
         }
       })
     })
