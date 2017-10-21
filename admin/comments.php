@@ -75,7 +75,7 @@ icey_get_current_user();
       <td class="text-center"><input type="checkbox"></td>
       <td>{{: author }}</td>
       <td>{{: content }}</td>
-      <td>《{{: post_id }}》</td>
+      <td>《{{: post_title }}》</td>
       <td>{{: created }}</td>
       <td>{{: status === 'approved' ? '批准' : status === 'held' ? '待审' : '驳回' }}</td>
       <td class="text-center">
@@ -94,7 +94,7 @@ icey_get_current_user();
         type: "get",
         // 设置响应的Content-Type为application/json  这里可以不设置
         dataType: "json",
-        data: { page: 1 },
+        data: { page: 2 },
         success: function (res) {
           /**
            * 渲染数据
