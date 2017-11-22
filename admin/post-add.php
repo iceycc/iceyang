@@ -25,7 +25,6 @@
   }
  ?>
 
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -35,6 +34,7 @@
   <link rel="stylesheet" href="/static/assets/vendors/font-awesome/css/font-awesome.css">
   <link rel="stylesheet" href="/static/assets/vendors/nprogress/nprogress.css">
   <link rel="stylesheet" href="/static/assets/css/admin.css">
+  <!-- 插入富文本编辑器css -->
   <link rel="stylesheet" href="/static/assets/vendors/simplemde/simplemde.min.css">
   <script src="/static/assets/vendors/nprogress/nprogress.js"></script>
 </head>
@@ -73,7 +73,7 @@
           <div class="form-group">
             <label for="feature">特色图像</label>
             <!-- show when image chose -->
-            <img class="help-block thumbnail" style="display: none">
+            <img id="preview" class="help-block thumbnail" style="display: none">
             <input id="feature" class="form-control" name="feature" type="file">
           </div>
           <div class="form-group">
@@ -107,9 +107,11 @@
 
   <script src="/static/assets/vendors/jquery/jquery.js"></script>
   <script src="/static/assets/vendors/bootstrap/js/bootstrap.js"></script>
+  <!-- 插入富文本编辑器 js -->
   <script src="/static/assets/vendors/simplemde/simplemde.min.js"></script>
   <script>
     $(function ($) {
+      // 插入富文本编辑器
       new SimpleMDE({
         element: $('#content')[0],
         spellChecker: false
@@ -138,6 +140,10 @@
           URL.revokeObjectURL(url)
         })
       })
+
+      var time = moment().format('YYYY-MM-DDTHH:mm')
+      // console.log(time)
+      $('#created').val(time)
     })
   </script> 
 

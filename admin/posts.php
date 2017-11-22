@@ -155,7 +155,8 @@
 
           <!-- 法二  通过封装函数   传入$page, $total_page ,请求地址含参数  还有展示的格数 -->
           <!-- &categories='. $category .'&status='.$status -->
-          <?php icey_pagination($page, $sum_page, '?page=%d&category='. $category .'&status='. $status, 5); ?>
+          <?php icey_pagination($page, $sum_page, '?page=%d', 5); ?>
+          
         </ul>
       </div>
       <table class="table table-striped table-bordered table-hover">
@@ -171,8 +172,7 @@
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($posts as $item): ?>
-            
+          <?php foreach ($posts as $item): ?>            
             <tr>
               <td class="text-center"><input type="checkbox"></td>
               <td><?php echo $item['title'] ?></td>
