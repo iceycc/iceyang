@@ -21,8 +21,56 @@
 
 ### 功能点分析
 
-* TODO:
+​	
+
 * ​
+
+* 表单提交
+
+  * 浏览器
+
+    * 页面form表单设置
+
+      * `method="post"`  `action="<?php echo $_SERVER['PHP_SELF']; ?>"` 
+      * 上传文件注意
+      * input  =>  `name="email"`  `name="password"`
+      * 添加`submit`按钮
+
+    * 服务器
+
+        * 1-首先判断是POST还是GET请求
+
+            * ​
+
+        * 2-接受表单数据并进行逻辑校验是否完整
+
+            *  `$_POST` 或 `$_GET`
+
+            * 校验 是否为空 `empty($_POST['xxxx'])`
+
+            * 如果为空 返回提示信息
+
+              `$GLOBALS['message'] = '没有填写用户名';`	
+
+            * 文件校验 
+            * 校验完毕接受参数
+
+        * 3- 业务校验
+
+            * 判断用户名是否存在 ,用户名密码是否匹配
+            * 链接数据库进行查询语句,是否存在用户名,在比较对应密码是否匹配 
+            * ​
+
+        * 4 -数据库链接查询  通过查询语句 进行增删改查的业务功能
+
+        *    ​
+
+        * 链接数据库
+            * 连接数据库`$conn = mysqli_connect(HOST, USER, DB_PASS, DB_NAME);`
+            * 设置查询语句 `$sql='增删改查sql'`
+            * 设置查询语句 `$query = mysqli_query($conn, $sql)`
+            * 校验查询是否成功  `if (!$query){ }`
+            * ​
 
 ### 开发阶段
 
@@ -58,3 +106,21 @@
     └── index.php ······························· 前台脚本文件
 ```
 #### 数据库设计
+
+TODO  待定  数据库 要设计的合理
+
+### 用到的技术点
+
+* bootstrap ---
+* echarts ---图表
+* font-awesome  ---字体图标库
+* jquery  ---
+* jsrender ---模板引擎（基于原生js）
+* moment  ---格式化时间
+* nprogress  --- 进图条
+* require.js ---JavaScript模块加载器  了解
+* simplemde  ---富文本编辑器
+* swipe  ---移动web页面内容触摸滑动类库（暂未应用，考虑移动端）
+* twbs-pagination  ---jquery分页插件:jquery.twbsPagination 
+* ueditor ---富文本编辑器
+* ​
